@@ -1,0 +1,6 @@
+﻿vir/
+__pycache__/
+uploads/
+.env
+desktop-tutorial/
+python_fastapi_new/
