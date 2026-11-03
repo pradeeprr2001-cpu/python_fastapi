@@ -6,12 +6,29 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy import Column, Float, Integer, String, create_engine
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
+import os
 
 # --- 1. DATABASE CONFIGURATION (PostgreSQL) ---
-# Format: postgresql://USER:PASSWORD@HOST:PORT/DB_NAME
-DATABASE_URL = "postgresql+psycopg://postgres:rwdy@localhost:5432/shop"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql+psycopg://postgres:rwdy@localhost:5432/shop",  # local fallback
+)
 
-engine = create_engine(DATABASE_URL)
+# Render gives "postgres://..." or "postgresql://...", but this project uses psycopg 3
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+elif DATABASE_URL.startswith("postgresql://") and not DATABASE_URL.startswith(
+    "postgresql+psycopg://"
+):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+
+# Render Postgres requires SSL; skip this for local development
+if "localhost" not in DATABASE_URL and "sslmode=" not in DATABASE_URL:
+    joiner = "&" if "?" in DATABASE_URL else "?"
+    DATABASE_URL = f"{DATABASE_URL}{joiner}sslmode=require"
+
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

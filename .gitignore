@@ -1,10 +1,19 @@
-﻿vir/
-__pycache__/
-uploads/
-.env
-desktop-tutorial/
-python_fastapi_new/
-desktop-tutorial/
-python_fastapi_new/
+﻿
+# Python cache
 __pycache__/
 *.pyc
+
+# Virtual environment
+vir/
+
+# Secrets
+.env
+
+# Test uploads
+uploads/
+
+# Nested folders / other repos
+desktop-tutorial/
+python_fastapi/
+python_fastapi_new/
+python_fastapi_update/
