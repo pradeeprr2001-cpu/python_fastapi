@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: shop-api
+    name: python_fastapi
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
