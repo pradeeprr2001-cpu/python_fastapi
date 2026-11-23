@@ -1,7 +1,10 @@
-﻿
-# Python cache
+﻿# Python cache
 __pycache__/
 *.pyc
+.pytest_cache/
+*.egg-info/
+.coverage
+htmlcov/
 
 # Virtual environment
 vir/
